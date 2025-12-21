@@ -1,112 +1,66 @@
 package com.Tracker.EveryDayTracker.Entity;
 
 import java.time.LocalDate;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name="daily_tasks")
+@Table(
+    name = "daily_tasks",
+    uniqueConstraints = @UniqueConstraint(columnNames = "date")
+)
 public class Task {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
-	
-	private LocalDate date;
-	private boolean DSA;
-	private boolean projectDev;
-	private boolean microServicesApi;
-	private boolean cpp;
-	
-	private double productivityScore;
-	
-	public void calproductivityScore() {
-		
-		double complete=0;
-		
-		if(DSA) complete++;
-		if(projectDev) complete++;
-		if(microServicesApi) complete++;
-		if(cpp) complete++;
-		
-		this.productivityScore= (complete/4.0)*100;
-	}
-	
-	public Task() {
-			
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public Task(Long id, LocalDate date, boolean dSA, boolean projectDev, boolean microServicesApi, boolean cpp,
-			double productivityScore) {
-		super();
-		Id = id;
-		this.date = date;
-		DSA = dSA;
-		this.projectDev = projectDev;
-		this.microServicesApi = microServicesApi;
-		this.cpp = cpp;
-		this.productivityScore = productivityScore;
-	}
+    @Column(nullable = false)
+    private LocalDate date;
 
-	public Long getId() {
-		return Id;
-	}
+    private boolean dsa;
+    private boolean projectDev;
+    private boolean microServicesApi;
+    private boolean cpp;
 
-	public LocalDate getDate() {
-		return date;
-	}
+    private double productivityScore;
 
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
+    public Task() {}
 
-	public void setId(Long id) {
-		Id = id;
-	}
+    @PrePersist
+    @PreUpdate
+    public void calculateProductivityScore() {
+        int completed = 0;
+        if (dsa) completed++;
+        if (projectDev) completed++;
+        if (microServicesApi) completed++;
+        if (cpp) completed++;
 
-	public boolean isDSA() {
-		return DSA;
-	}
+        this.productivityScore = (completed / 4.0) * 100;
+    }
 
-	public void setDSA(boolean dSA) {
-		DSA = dSA;
-	}
+    // ===== Getters & Setters =====
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-	public boolean isProjectDev() {
-		return projectDev;
-	}
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 
-	public void setProjectDev(boolean projectDev) {
-		this.projectDev = projectDev;
-	}
+    public boolean isDsa() { return dsa; }
+    public void setDsa(boolean dsa) { this.dsa = dsa; }
 
-	public boolean isMicroServicesApi() {
-		return microServicesApi;
-	}
+    public boolean isProjectDev() { return projectDev; }
+    public void setProjectDev(boolean projectDev) { this.projectDev = projectDev; }
 
-	public void setMicroServicesApi(boolean microServicesApi) {
-		this.microServicesApi = microServicesApi;
-	}
+    public boolean isMicroServicesApi() { return microServicesApi; }
+    public void setMicroServicesApi(boolean microServicesApi) {
+        this.microServicesApi = microServicesApi;
+    }
 
-	public boolean isCpp() {
-		return cpp;
-	}
+    public boolean isCpp() { return cpp; }
+    public void setCpp(boolean cpp) { this.cpp = cpp; }
 
-	public void setCpp(boolean cpp) {
-		this.cpp = cpp;
-	}
-
-	public double getProductivityScore() {
-		return productivityScore;
-	}
-
-	public void setProductivityScore(double productivityScore) {
-		this.productivityScore = productivityScore;
-	}
-	
-	
+    public double getProductivityScore() { return productivityScore; }
+    public void setProductivityScore(double productivityScore) {
+        this.productivityScore = productivityScore;
+    }
 }

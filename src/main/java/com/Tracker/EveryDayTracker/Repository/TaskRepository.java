@@ -9,7 +9,8 @@ import com.Tracker.EveryDayTracker.Entity.Task;
 
 import jakarta.persistence.Id;
 
-public interface TaskRepository extends JpaRepository<Task,Id>{
+public interface TaskRepository extends JpaRepository<Task,Long>{
 	
 	Optional<Task> findByDate(LocalDate date);
+	void deleteByDate(LocalDate date);
 }
